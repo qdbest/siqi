@@ -11,6 +11,10 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path:'/',
+      redirect: '/sell'
+    },
+    {
       path: '/sell',
       name: '售货',
       component: Sell

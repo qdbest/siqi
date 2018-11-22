@@ -11,7 +11,13 @@
         <el-input placeholder="名称"></el-input>
       </el-form-item>
       <el-form-item label="规格">
-        <el-input placeholder="规格"></el-input>
+        <el-input placeholder="规格" style="width: 80px"></el-input>
+      </el-form-item>
+      <el-form-item label="单位">
+        <el-input placeholder="单位" style="width: 80px;"></el-input>
+      </el-form-item>
+      <el-form-item label="零售价">
+        <el-input-number :precision="2" :step="0.1" :min="0.1" :max="10" style="width: 140px"></el-input-number>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-plus" round>添加</el-button>
