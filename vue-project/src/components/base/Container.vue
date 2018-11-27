@@ -6,7 +6,7 @@
         <router-view></router-view>
       </keep-alive>
     </el-main>
-    <el-footer style="text-align: center;">Footer</el-footer>
+    <el-footer style="text-align: center;">技术支持：郭玉成</el-footer>
   </el-container>
 </template>
 

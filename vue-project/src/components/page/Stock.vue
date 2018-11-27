@@ -4,8 +4,8 @@
       <el-menu :default-active="$route.path" :default-openeds="['stock']" router>
         <el-submenu index="stock">
           <template slot="title"><i class="el-icon-ali-shangpinguanli"></i>商品管理</template>
-          <el-menu-item index="/stock/category"><i class="el-icon-ali-tubiaozhizuomoban"></i>商品种类</el-menu-item>
-          <el-menu-item index="/stock/jinhuo"><i class="el-icon-ali-jinhuo"></i>进货</el-menu-item>
+          <el-menu-item index="/stock/commodity"><i class="el-icon-ali-tubiaozhizuomoban"></i>商品</el-menu-item>
+          <el-menu-item index="/stock/stockCommodity"><i class="el-icon-ali-jinhuo"></i>进货</el-menu-item>
           <el-menu-item index="/stock/shangjia"><i class="el-icon-ali-shangjia"></i>上架</el-menu-item>
         </el-submenu>
       </el-menu>
@@ -22,7 +22,8 @@
   export default {
     name: "Stock",
     data() {
-      return {}
+      return {
+      }
     },
     computed: {},
     created() {

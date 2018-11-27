@@ -1,0 +1,5 @@
+const LIST_COMMODITIES='LIST_COMMODITIES';
+
+export default {
+  LIST_COMMODITIES,
+}
