@@ -1,5 +1,7 @@
 package com.yucn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,18 +14,16 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
 public class SaleCommodity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //商品
-    @ManyToOne
-    private Commodity commodity;
-    //进货商品，实为进货批次
-    @ManyToOne
-    private StockCommodity stockCommodity;
-    //数量，默认为1
-    private int quantity = 1;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private SaleOrder saleOrder;
+    @OneToOne
+    private CartCommodity cartCommodity;
     //删除标记，默认否
+    @JsonIgnore
     private boolean deleted = false;
 }

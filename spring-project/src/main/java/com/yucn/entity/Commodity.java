@@ -1,5 +1,7 @@
 package com.yucn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +15,7 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
 public class Commodity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +33,6 @@ public class Commodity {
     //零售价
     private BigDecimal price;
     //删除标记
+    @JsonIgnore
     private boolean deleted = false;
 }

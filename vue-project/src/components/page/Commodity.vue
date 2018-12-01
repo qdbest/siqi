@@ -126,6 +126,16 @@
           'listCommodities'
         ]
       ),
+      search() {
+        getRequest(`api/commodity/find`, {code: this.commodity.code})
+          .then(response => {
+            this.isExisted = response.data.data != null;
+            if (this.isExisted) {
+              Message.error('该条码已经存在');
+              this.commodity.code = '';
+            }
+          });
+      },
       add() {
         this.$refs['commodityForm'].validate(valid => {
           if (!valid) {
@@ -138,11 +148,7 @@
                 Message.success('添加商品成功');
                 this.$refs['commodityForm'].resetFields();
                 this.$refs['input'].focus();
-                if (this.commodities.length >= this.pageSize) {
-                  this.commodities.pop();
-                }
-                this.commodities.unshift(response.data.data);
-                this.incrementTotal();
+                this.listCommodities({pageSize: this.pageSize, currentPage: this.currentPage});
               });
           }
         });
@@ -154,16 +160,6 @@
       handleCurrentChange(val) {
         this.currentPage = val;
         this.listCommodities({pageSize: this.pageSize, currentPage: this.currentPage})
-      },
-      search() {
-        getRequest(`api/commodity/find`, {code: this.commodity.code})
-          .then(response => {
-            this.isExisted = response.data.data != null;
-            if (this.isExisted) {
-              Message.error('该条码已经存在');
-              this.commodity.code = '';
-            }
-          });
       }
     },
     components: {}

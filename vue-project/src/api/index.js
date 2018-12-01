@@ -1,26 +1,26 @@
 import axios from 'axios'
 import {Message, Loading} from 'element-ui'
 
-let loading;
+// let loading;
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-  loading = Loading.service({target: '.el-table'});
+  // loading = Loading.service({target: '.el-table'});
   return Promise.resolve(config);
 }, function (error) {
-  loading.close();
+  // loading.close();
   Message.error('请求超时!');
   return Promise.reject(error);
 });
 
 // Add a response interceptor
 axios.interceptors.response.use(function (response) {
-  loading.close();
-  if (response.status && response.status == 200 && response.data.status == 'error') {
-    Message.error({message: response.data.msg});
+  // loading.close();
+  if (response.status && response.status == 200 && response.data.code === 0 && response.data.msg !== null) {
+    Message.success(response.data.msg);
   }
   return response;
 }, function (error) {
-  loading.close();
+  // loading.close();
   if (error.response.status == 504 || error.response.status == 404) {
     Message.error('服务器被连接错误');
   } else if (error.response.status == 403) {
@@ -48,7 +48,7 @@ export const getRequest = (url, params) => {
 export const postRequest = (url, params) => {
   console.log({params});
   return new Promise((resolve, reject) => {
-    axios.post(`${base}${url}`,params)
+    axios.post(`${base}${url}`, params)
       .then(response => {
         resolve(response);
       })

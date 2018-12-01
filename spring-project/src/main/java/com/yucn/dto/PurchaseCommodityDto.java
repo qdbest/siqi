@@ -1,7 +1,7 @@
 package com.yucn.dto;
 
+import com.yucn.entity.PurchaseCommodity;
 import com.yucn.entity.PurchaseOrder;
-import com.yucn.entity.StockCommodity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-public class StockCommodityDto {
+public class PurchaseCommodityDto {
     private PurchaseOrder purchaseOrder;
-    private Set<StockCommodity> stockCommodities;
+    private Set<PurchaseCommodity> purchaseCommodities;
 }

@@ -1,13 +1,12 @@
 package com.yucn.service;
 
-import com.yucn.entity.PurchaseOrder;
-import com.yucn.entity.StockCommodity;
-
-import java.util.Set;
+import com.yucn.entity.CartCommodity;
 
 /**
- * Created by Administrator on 2018/11/23.
+ * Created by Administrator on 2018/11/28.
  */
 public interface StockCommodityService {
-    void addAll(PurchaseOrder purchaseOrder, Set<StockCommodity> stockCommodities) throws Exception;
+    CartCommodity reduceOne(String commodityCode);
+
+    CartCommodity reduce(CartCommodity cartCommodity);
 }

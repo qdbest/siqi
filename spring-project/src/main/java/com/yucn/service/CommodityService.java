@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 public interface CommodityService {
     Commodity findByCode(String code);
 
-    void add(Commodity commodity) throws Exception;
+    void add(Commodity commodity);
 
     Page<Commodity> list(PageRequest request);
 }

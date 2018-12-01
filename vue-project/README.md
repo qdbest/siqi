@@ -107,5 +107,32 @@ listCommodities({state, commit}, params) {
     ```
     参考如下文章，官网只是简单示例
     [vue+element表单验证(多重object嵌套)](https://blog.csdn.net/yytoo2/article/details/82626219)
+
+### watch，对复杂结构，如对象、数组，数组中又套对象的深度监控
+```
+//因为引用的问题，Vue无法保留数组中对象的副本，newValue和oldValue值相同，因此，此处采取在data中设置全局变量，每次改变，进行深度拷贝的方法保留数组的副本
+watch: {
+  saleCommodities: {
+    handler(newValue) {
+      for (let i = 0; i < newValue.length; i++) {
+        if (this.oldSaleCommodities[i].quantity !== newValue[i].quantity) {
+          // 减库存
+          postRequest(`api/stockCommodity/reduce`, newValue[i])
+            .then(response => {
+              // 因引用问题，不能直接通过“=”进行赋值
+              this.oldSaleCommodities = JSON.parse(JSON.stringify(newValue));
+            })
+            .catch(error => {
+              // 发生异常，比如库存不足，改回原值
+              this.saleCommodities = JSON.parse(JSON.stringify(this.oldSaleCommodities));
+            })
+        }
+      }
+    },
+    deep: true
+  }
+},
+```
+[Vue watcher oldValue和newValue始终一样，watcher监听一个对象的具体属性](https://www.w2le.com/p/108)
     
 
