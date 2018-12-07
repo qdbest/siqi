@@ -222,7 +222,7 @@
     methods: {
       // 向后台查询商品是否存在
       search() {
-        getRequest(`api/commodity/code/${this.purchaseCommodity.commodity.code}`)
+        getRequest(`/commodity/code/${this.purchaseCommodity.commodity.code}`)
           .then(response => {
             this.isExisted = response.data.data != null;
             if (!this.isExisted) {
@@ -260,7 +260,7 @@
           } else if (this.purchaseOrder.realPay - this.purchaseOrder.pay > 0) {
             Message.error('实付不能大于应付，请核对进货单！');
           } else {
-            postRequest('api/stock/putIn', {
+            postRequest('/stock/putIn', {
               purchaseOrder: this.purchaseOrder,
               purchaseCommodities: this.purchaseCommodities
             })

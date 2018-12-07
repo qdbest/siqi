@@ -8,6 +8,8 @@ import PurchaseCommodity from '../components/page/PurchaseCommodity'
 Vue.use(Router)
 
 export default new Router({
+  mode:'history',
+  base:'siqi',
   routes: [
     {
       path:'/',

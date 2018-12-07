@@ -96,7 +96,7 @@
           for (let i = 0; i < newValue.length; i++) {
             if (this.oldCartCommodities[i].quantity !== newValue[i].quantity) {
               // 减库存
-              putRequest(`api/cart`, newValue[i])
+              putRequest(`/cart`, newValue[i])
                 .then(response => {
                   // 因引用问题，不能直接通过“=”进行赋值
                   this.oldCartCommodities = JSON.parse(JSON.stringify(newValue));
@@ -132,7 +132,7 @@
       // 查库存
       search() {
         // 减库存
-        getRequest(`api/cart/${this.commodityCode}`)
+        getRequest(`/cart/${this.commodityCode}`)
           .then(response => {
             this.cartCommodities.push(response.data.data);
             this.oldCartCommodities = JSON.parse(JSON.stringify(this.cartCommodities));
@@ -140,7 +140,7 @@
         this.commodityCode = '';
       },
       handleDelete(cartCommodity) {
-        deleteRequest(`api/cart`, cartCommodity)
+        deleteRequest(`/cart`, cartCommodity)
           .then(response => {
             this.cartCommodities.splice(this.cartCommodities.indexOf(cartCommodity), 1);
           })
@@ -150,7 +150,7 @@
       },
       receive() {
         if (this.realIncome - this.income >= 0) {
-          postRequest(`api/cart/receive`, {
+          postRequest(`/cart/receive`, {
             saleOrder: {
               income: this.income,
               realIncome: this.realIncome,

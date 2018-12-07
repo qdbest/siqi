@@ -33,7 +33,7 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 
-let base = '';
+let base = '/siqiApi';
 
 export const getRequest = (url, config) => {
   return new Promise((resolve, reject) => {

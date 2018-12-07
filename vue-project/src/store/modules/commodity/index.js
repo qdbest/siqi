@@ -12,7 +12,7 @@ const getters = {};
 
 const actions = {
   listCommodities({commit},payload) {
-    getRequest(`api/commodity/currentPage/${payload.currentPage}/pageSize/${payload.pageSize}`)
+    getRequest(`/commodity/currentPage/${payload.currentPage}/pageSize/${payload.pageSize}`)
       .then(response => {
         commit('commoditiesChange', response.data.data.content);
         commit('totalChange', response.data.data.totalElements);

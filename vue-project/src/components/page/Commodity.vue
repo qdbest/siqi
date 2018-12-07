@@ -157,7 +157,7 @@
         ]
       ),
       search() {
-        getRequest(`api/commodity/code/${this.commodity.code}`)
+        getRequest(`/commodity/code/${this.commodity.code}`)
           .then(response => {
             this.isExisted = response.data.data != null;
             if (this.isExisted) {
@@ -173,7 +173,7 @@
           } else if (this.isExisted) {
             Message.error('该条码已经存在');
           } else {
-            postRequest('api/commodity/add', this.commodity)
+            postRequest('/commodity/add', this.commodity)
               .then(response => {
                 Message.success('添加商品成功');
                 this.$refs['commodityForm'].resetFields();
@@ -195,7 +195,7 @@
         this.$set(this.commodities[$index], 'editing', true);
       },
       handleSave($index, row) {
-        putRequest(`api/commodity`, row)
+        putRequest(`/commodity`, row)
           .then(response => {
             this.$set(this.commodities[$index], 'editing', false);
           });
@@ -207,7 +207,7 @@
           type: 'warning'
         }).then(()=>{
           console.log(row.id);
-          deleteRequest(`api/commodity/${row.id}`)
+          deleteRequest(`/commodity/${row.id}`)
             .then(response => {
               this.listCommodities({pageSize: this.pageSize, currentPage: this.currentPage})
             });
