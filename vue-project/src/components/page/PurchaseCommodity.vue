@@ -9,6 +9,16 @@
         <el-form-item label="供货商" prop="seller">
           <el-input placeholder="供货商" v-model="purchaseOrder.seller"></el-input>
         </el-form-item>
+        <el-form-item label="应付" prop="pay">
+          <el-input class="income" v-model="pay" :disabled="true">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="实付" prop="realPay">
+          <el-input class="income" placeholder="实付" v-model="purchaseOrder.realPay"></el-input>
+        </el-form-item>
+        <el-form-item label="优惠" prop="discount">
+          <el-input class="income" placeholder="优惠" v-model="discount" :disabled="true"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button type="success" icon="el-icon-ali-tijiao" round @click="putIn">入库</el-button>
         </el-form-item>
@@ -127,7 +137,9 @@
     data() {
       return {
         currentTime: new Date(),
-        purchaseOrder: {},
+        purchaseOrder: {
+          pay: 0
+        },
         purchaseCommodity: {
           commodity: {},
           paidPrice: 0,
@@ -140,6 +152,12 @@
           ],
           seller: [
             {required: true, message: '供货商不能为空', trigger: 'blur'}
+          ],
+          pay: [
+            {required: true, message: '应付不能为空', trigger: 'blur'}
+          ],
+          realPay: [
+            {required: true, message: '实付不能为空', trigger: 'blur'}
           ]
         },
         purchaseCommodityRule: {
@@ -170,6 +188,12 @@
           this.purchaseOrder.code = val;
         }
       },
+      pay() {
+        this.purchaseOrder.pay = this.purchaseCommodities.reduce((prev, next) => {
+          return prev + next.totalPrice;
+        }, 0);
+        return this.purchaseOrder.pay.toFixed(2);
+      },
       totalPrice: {
         get() {
           return this.purchaseCommodity.totalPrice = this.purchaseCommodity.paidPrice * this.purchaseCommodity.quantity;
@@ -179,6 +203,10 @@
           this.purchaseCommodity.paidPrice = this.purchaseCommodity.totalPrice / this.purchaseCommodity.quantity;
         }
       },
+      discount() {
+        if (this.purchaseOrder.realPay)
+          return this.pay - this.purchaseOrder.realPay;
+      }
     },
     watch: {
       purchaseCommodities(newValue) {
@@ -194,7 +222,7 @@
     methods: {
       // 向后台查询商品是否存在
       search() {
-        getRequest(`api/commodity/find`, {code: this.purchaseCommodity.commodity.code})
+        getRequest(`api/commodity/code/${this.purchaseCommodity.commodity.code}`)
           .then(response => {
             this.isExisted = response.data.data != null;
             if (!this.isExisted) {
@@ -229,6 +257,8 @@
             Message.error('表单验证失败');
           } else if (this.purchaseCommodities.length <= 0) {
             Message.error('没有进货明细，请先添加进货明细');
+          } else if (this.purchaseOrder.realPay - this.purchaseOrder.pay > 0) {
+            Message.error('实付不能大于应付，请核对进货单！');
           } else {
             postRequest('api/stock/putIn', {
               purchaseOrder: this.purchaseOrder,

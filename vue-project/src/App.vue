@@ -26,4 +26,10 @@
   a{
     text-decoration: none;
   }
+  .income > input {
+    width: 160px;
+    color: red !important;
+    font-size: 16px;
+    font-weight: bold;
+  }
 </style>

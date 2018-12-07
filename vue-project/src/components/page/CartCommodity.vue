@@ -21,7 +21,7 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="success" round @click="reseive"><i class="el-icon-ali-fl-renminbi"></i>结账</el-button>
+        <el-button type="success" round @click="receive"><i class="el-icon-ali-fl-renminbi"></i>结账</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -75,12 +75,11 @@
 </template>
 
 <script>
-  import {format} from 'date-fns'
-  import {getRequest, postRequest} from '../../api'
+  import {getRequest, postRequest, putRequest, deleteRequest} from '../../api'
   import {Message} from 'element-ui'
 
   export default {
-    name: "SaleCommodity",
+    name: "CartCommodity",
 
     data() {
       return {
@@ -97,7 +96,7 @@
           for (let i = 0; i < newValue.length; i++) {
             if (this.oldCartCommodities[i].quantity !== newValue[i].quantity) {
               // 减库存
-              postRequest(`api/cart/change`, newValue[i])
+              putRequest(`api/cart`, newValue[i])
                 .then(response => {
                   // 因引用问题，不能直接通过“=”进行赋值
                   this.oldCartCommodities = JSON.parse(JSON.stringify(newValue));
@@ -124,7 +123,7 @@
       }
     },
     created() {
-      this.cartCommodities = JSON.parse(localStorage.getItem("cartCommodities")) || [];
+      this.cartCommodities = this.oldCartCommodities = JSON.parse(localStorage.getItem("cartCommodities")) || [];
     },
     mounted() {
       this.$refs['input'].focus();
@@ -133,46 +132,47 @@
       // 查库存
       search() {
         // 减库存
-        getRequest(`api/cart/add`, {
-          commodityCode: this.commodityCode
-        })
+        getRequest(`api/cart/${this.commodityCode}`)
           .then(response => {
-            console.log(response.data.data);
             this.cartCommodities.push(response.data.data);
             this.oldCartCommodities = JSON.parse(JSON.stringify(this.cartCommodities));
           });
         this.commodityCode = '';
       },
-      handleDelete(saleCommodity) {
-        postRequest(`api/saleCommodity/delete`, saleCommodity)
+      handleDelete(cartCommodity) {
+        deleteRequest(`api/cart`, cartCommodity)
           .then(response => {
-            this.cartCommodities.splice(this.cartCommodities.indexOf(saleCommodity), 1);
+            this.cartCommodities.splice(this.cartCommodities.indexOf(cartCommodity), 1);
           })
           .catch(error => {
 
           });
       },
-      reseive() {
-        postRequest(`api/saleCommodity/receive`, {
-          saleOrder: {
-            income: this.income,
-            realIncome: this.realIncome,
-            giveChange: this.giveChange
-          },
-          cartCommodities: this.cartCommodities
-        })
-          .then(response => {
-            this.cartCommodities = [];
-            this.oldCartCommodities = [];
-            this.realIncome = 0;
-            this.$refs['input'].focus();
-          });
+      receive() {
+        if (this.realIncome - this.income >= 0) {
+          postRequest(`api/cart/receive`, {
+            saleOrder: {
+              income: this.income,
+              realIncome: this.realIncome,
+              giveChange: this.giveChange
+            },
+            cartCommodities: this.cartCommodities
+          })
+            .then(response => {
+              this.cartCommodities = [];
+              this.oldCartCommodities = [];
+              this.realIncome = 0;
+              this.$refs['input'].focus();
+            });
+        } else {
+          Message.error("实收不能小于应收！请确保人工输入实收！");
+        }
       }
     }
   }
 </script>
 
-<style lang="less">
+<style scoped lang="less">
   fieldset {
     border: 1px solid lightseagreen;
     margin-top: 10px;
@@ -181,13 +181,5 @@
 
   legend {
     color: lightseagreen;
-  }
-
-  /*.el-input.is-disabled .el-input__inner,.el-input--small .el-input__inner{*/
-  .income > input {
-    width: 160px;
-    color: red !important;
-    font-size: 20px;
-    font-weight: bold;
   }
 </style>

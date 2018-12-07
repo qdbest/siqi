@@ -13,4 +13,8 @@ public interface CommodityService {
     void add(Commodity commodity);
 
     Page<Commodity> list(PageRequest request);
+
+    Commodity update(Commodity commodity);
+
+    Commodity delete(Long commodity);
 }

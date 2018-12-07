@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Created by Administrator on 2018/11/23.
  */
-public interface SaleCommodityService {
+public interface CartCommodityService {
     CartCommodity delete(CartCommodity cartCommodity);
 
     SaleOrder receive(SaleOrder saleOrder, Set<CartCommodity> cartCommodities);

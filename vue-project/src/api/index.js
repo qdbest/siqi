@@ -23,6 +23,8 @@ axios.interceptors.response.use(function (response) {
   // loading.close();
   if (error.response.status == 504 || error.response.status == 404) {
     Message.error('服务器被连接错误');
+  } else if (error.response.status == 401) {
+    Message.error('请先登录');
   } else if (error.response.status == 403) {
     Message.error('权限不足,请联系管理员!');
   } else {
@@ -33,9 +35,9 @@ axios.interceptors.response.use(function (response) {
 
 let base = '';
 
-export const getRequest = (url, params) => {
+export const getRequest = (url, config) => {
   return new Promise((resolve, reject) => {
-    axios.get(`${base}${url}`, {params})
+    axios.get(`${base}${url}`, config)
       .then(response => {
         resolve(response);
       })
@@ -45,10 +47,33 @@ export const getRequest = (url, params) => {
   });
 };
 
-export const postRequest = (url, params) => {
-  console.log({params});
+export const postRequest = (url, data, config) => {
   return new Promise((resolve, reject) => {
-    axios.post(`${base}${url}`, params)
+    axios.post(`${base}${url}`, data, config)
+      .then(response => {
+        resolve(response);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+export const putRequest = (url, data, config) => {
+  return new Promise((resolve, reject) => {
+    axios.put(`${base}${url}`, data, config)
+      .then(response => {
+        resolve(response);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+export const deleteRequest = (url, config) => {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${base}${url}`, config)
       .then(response => {
         resolve(response);
       })

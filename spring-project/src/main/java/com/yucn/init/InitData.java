@@ -44,6 +44,8 @@ public class InitData {
         PurchaseOrder purchaseOrder=new PurchaseOrder();
         purchaseOrder.setCode("p123");
         purchaseOrder.setSeller("1号店");
+        purchaseOrder.setPay(new BigDecimal(30));
+        purchaseOrder.setRealPay(new BigDecimal(30));
 
         PurchaseCommodity purchaseCommodity =new PurchaseCommodity();
         purchaseCommodity.setCommodity(commodity);

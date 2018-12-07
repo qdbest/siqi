@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import SaleCommodity from '../components/page/SaleCommodity'
+import CartCommodity from '../components/page/CartCommodity'
 import Stock from '../components/page/Stock'
 import Commodity from '../components/page/Commodity'
 import PurchaseCommodity from '../components/page/PurchaseCommodity'
-import Shangjia from '../components/page/Shangjia'
 
 Vue.use(Router)
 
@@ -12,12 +11,12 @@ export default new Router({
   routes: [
     {
       path:'/',
-      redirect: '/saleCommodity'
+      redirect: '/cartCommodity'
     },
     {
-      path: '/saleCommodity',
+      path: '/cartCommodity',
       name: '售货',
-      component: SaleCommodity
+      component: CartCommodity
     },
     {
       path: '/stock',
@@ -34,11 +33,6 @@ export default new Router({
           path: 'purchaseCommodity',
           name: '进货',
           component: PurchaseCommodity
-        },
-        {
-          path: 'shangjia',
-          name: '上架',
-          component: Shangjia
         }
       ]
     }

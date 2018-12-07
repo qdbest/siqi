@@ -29,32 +29,62 @@
       style="width: 100%">
       <el-table-column
         prop="id"
-        label="序号"
-        width="60">
+        label="序号">
       </el-table-column>
       <el-table-column
         prop="code"
-        label="条码"
-        width="160">
+        label="条码">
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="名称"
-        width="200">
+        label="名称">
+        <template slot-scope="scope">
+          <div v-if="!scope.row.editing">{{scope.row.name}}</div>
+          <el-input v-else v-model="scope.row.name"></el-input>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="specification"
-        label="规格"
-        width="200">
+        label="规格">
+        <template slot-scope="scope">
+          <div v-if="!scope.row.editing">{{scope.row.specification}}</div>
+          <el-input v-else v-model="scope.row.specification"></el-input>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="unit"
-        label="单位"
-        width="60">
+        label="单位">
+        <template slot-scope="scope">
+          <div v-if="!scope.row.editing">{{scope.row.unit}}</div>
+          <el-input v-else v-model="scope.row.unit"></el-input>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="price"
         label="零售价">
+        <template slot-scope="scope">
+          <div v-if="!scope.row.editing">{{scope.row.price}}</div>
+          <el-input v-else v-model="scope.row.price"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作">
+        <template slot-scope="scope">
+          <el-button v-if="!scope.row.editing"
+                     size="mini"
+                     type="primary"
+                     icon="el-icon-edit"
+                     @click="handleEdit(scope.$index,scope.row)">
+          </el-button>
+          <el-button v-else
+                     size="mini"
+                     type="success"
+                     icon="el-icon-check"
+                     @click="handleSave(scope.$index,scope.row)">
+          </el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            icon="el-icon-close"
+            @click="handleDelete(scope.$index,scope.row)">
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -72,7 +102,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import {getRequest, postRequest} from '../../api'
+  import {getRequest, postRequest, putRequest, deleteRequest} from '../../api'
   import {Message} from 'element-ui'
 
   const {mapState, mapGetters, mapMutations, mapActions} = createNamespacedHelpers('commodity');
@@ -113,7 +143,7 @@
       })
     },
     created() {
-      this.listCommodities({pageSize: this.pageSize, currentPage: this.currentPage});
+      this.listCommodities({currentPage: this.currentPage, pageSize: this.pageSize});
     },
     mounted() {
       this.$refs['input'].focus();
@@ -127,7 +157,7 @@
         ]
       ),
       search() {
-        getRequest(`api/commodity/find`, {code: this.commodity.code})
+        getRequest(`api/commodity/code/${this.commodity.code}`)
           .then(response => {
             this.isExisted = response.data.data != null;
             if (this.isExisted) {
@@ -160,6 +190,28 @@
       handleCurrentChange(val) {
         this.currentPage = val;
         this.listCommodities({pageSize: this.pageSize, currentPage: this.currentPage})
+      },
+      handleEdit($index, row) {
+        this.$set(this.commodities[$index], 'editing', true);
+      },
+      handleSave($index, row) {
+        putRequest(`api/commodity`, row)
+          .then(response => {
+            this.$set(this.commodities[$index], 'editing', false);
+          });
+      },
+      handleDelete($index, row) {
+        this.$confirm('确实要删除该商品吗?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          console.log(row.id);
+          deleteRequest(`api/commodity/${row.id}`)
+            .then(response => {
+              this.listCommodities({pageSize: this.pageSize, currentPage: this.currentPage})
+            });
+        });
       }
     },
     components: {}

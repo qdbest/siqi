@@ -9,8 +9,7 @@ import com.yucn.repository.CartCommodityRepository;
 import com.yucn.repository.SaleCommodityRepository;
 import com.yucn.repository.SaleOrderRepository;
 import com.yucn.repository.StockCommodityRepository;
-import com.yucn.service.SaleCommodityService;
-import org.springframework.beans.BeanUtils;
+import com.yucn.service.CartCommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ import static com.yucn.enums.ResultEnum.DATABASE_ERROR;
  * Created by Administrator on 2018/11/23.
  */
 @Service
-public class SaleCommodityServiceImpl implements SaleCommodityService {
+public class CartCommodityServiceImpl implements CartCommodityService {
     @Autowired
     private StockCommodityRepository stockCommodityRepository;
     @Autowired

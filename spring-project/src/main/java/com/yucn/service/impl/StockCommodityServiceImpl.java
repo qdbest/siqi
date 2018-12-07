@@ -24,10 +24,6 @@ public class StockCommodityServiceImpl implements StockCommodityService {
     private StockCommodityRepository stockCommodityRepository;
     @Autowired
     private CartCommodityRepository cartCommodityRepository;
-    @Autowired
-    private SaleOrderRepository saleOrderRepository;
-    @Autowired
-    private SaleCommodityRepository saleCommodityRepository;
 
     @Override
     public CartCommodity reduceOne(String commodityCode) {

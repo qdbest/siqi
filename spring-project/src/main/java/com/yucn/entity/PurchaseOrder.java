@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -25,6 +26,10 @@ public class PurchaseOrder {
     private String code;
     //供货商
     private String seller;
+    //应付
+    private BigDecimal pay;
+    //实付
+    private BigDecimal realPay;
     //生成时间
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createTime;

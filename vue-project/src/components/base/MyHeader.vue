@@ -4,7 +4,7 @@
       <span>思起超市收银系统</span>
       <span></span>
       <nav>
-        <router-link to="/saleCommodity">
+        <router-link to="/cartCommodity">
           <i class="el-icon-ali-daishouhuo"></i>
           <span>售货</span>
         </router-link>
@@ -21,9 +21,11 @@
   export default {
     name: "MyHeader",
     data() {
-      return {}
+      return {
+      }
     },
-    computed: {},
+    computed: {
+    },
     created() {
     },
     methods: {},

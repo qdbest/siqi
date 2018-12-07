@@ -38,6 +38,19 @@
         }
     }
 ```
+- 使用ObjectMapper进行json解析
+```java
+@PostMapping("/putIn")
+    public ResultVO putIn(@RequestBody Map map) throws IOException{
+        log.info("商品入库");
+        PurchaseOrder purchaseOrder=objectMapper.readValue(objectMapper.writeValueAsString(map.get("purchaseOrder")), PurchaseOrder.class);
+        JavaType javaType=objectMapper.getTypeFactory().constructParametricType(Set.class, PurchaseCommodity.class);
+        Set<PurchaseCommodity> purchaseCommodities = objectMapper.readValue(objectMapper.writeValueAsString(map.get("purchaseCommodities")),javaType);
+        Set<StockCommodity> stockCommodities=purchaseCommodityService.putInStorage(purchaseOrder, purchaseCommodities);
+
+        return ResultVOUtil.success("入库成功", stockCommodities);
+    }
+```
 - 封装对象传值
 ```java
 // 1.封装pojo类

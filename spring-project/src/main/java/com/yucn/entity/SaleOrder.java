@@ -21,8 +21,6 @@ public class SaleOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //销售单号
-    private String code;
     //商品列表
     @JsonIgnore
     @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "saleOrder")
@@ -36,8 +34,6 @@ public class SaleOrder {
     //创建时间
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createTime;
-    //已付款
-    private boolean paid = false;
     //删除标记，默认否
     @JsonIgnore
     private boolean deleted = false;

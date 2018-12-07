@@ -21,31 +21,44 @@ public class CommodityController {
     @Autowired
     private CommodityService commodityService;
 
-    @GetMapping
-    public ResultVO list(@RequestParam(value = "currentPage") Integer page,
-                                          @RequestParam(value = "pageSize") Integer size) {
+    @GetMapping("/currentPage/{currentPage}/pageSize/{pageSize}")
+    public ResultVO list(@PathVariable("currentPage") Integer currentPage, @PathVariable("pageSize") Integer pageSize) {
         log.info("查询商品列表");
         Sort sort = new Sort(Sort.Direction.DESC, "id");
-        PageRequest request = PageRequest.of(page - 1, size, sort);
+        PageRequest request = PageRequest.of(currentPage - 1, pageSize, sort);
         Page<Commodity> commodityPage = commodityService.list(request);
         System.out.println(commodityPage);
-        return ResultVOUtil.success(null,commodityPage);
+        return ResultVOUtil.success(null, commodityPage);
     }
 
-    @GetMapping("/find")
-    public ResultVO findByCode(@RequestParam(value = "code") String code){
+    @GetMapping("/code/{code}")
+    public ResultVO findByCode(@PathVariable String code) {
         log.info("根据条码查询商品是否已经存在");
-        Commodity commodity=commodityService.findByCode(code);
-        return ResultVOUtil.success(null,commodity);
+        Commodity commodity = commodityService.findByCode(code);
+        return ResultVOUtil.success(null, commodity);
     }
 
     @PostMapping("/add")
     public ResultVO add(@RequestBody Commodity commodity) throws Exception {
         log.info("添加商品");
-        if(commodity.equals(null)){
+        if (commodity.equals(null)) {
             throw new Exception("商品不能为空");
         }
         commodityService.add(commodity);
-        return ResultVOUtil.success("添加商品成功",null);
+        return ResultVOUtil.success("添加商品成功", null);
+    }
+
+    @PutMapping
+    public ResultVO update(@RequestBody Commodity commodity) {
+        log.info("修改商品");
+        commodity = commodityService.update(commodity);
+        return ResultVOUtil.success("修改商品成功", commodity);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResultVO delete(@PathVariable Long id) {
+        log.info("删除商品");
+        Commodity commodity = commodityService.delete(id);
+        return ResultVOUtil.success("删除商品成功", commodity);
     }
 }
