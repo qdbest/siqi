@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
+      '/siqiApi': {
         target: 'http://localhost:8899',//后端接口地址
         changeOrigin: true,//是否允许跨越
         pathRewrite: {
-          '^/api': '/',//重写,
+          '^/siqiApi': '/',//重写,
         }
       }
     },

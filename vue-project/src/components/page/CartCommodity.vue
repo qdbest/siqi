@@ -140,7 +140,7 @@
         this.commodityCode = '';
       },
       handleDelete(cartCommodity) {
-        deleteRequest(`/cart`, cartCommodity)
+        deleteRequest(`/cart/${cartCommodity.id}`)
           .then(response => {
             this.cartCommodities.splice(this.cartCommodities.indexOf(cartCommodity), 1);
           })

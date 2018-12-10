@@ -51,10 +51,10 @@ public class CartController {
         return ResultVOUtil.success(null, cartCommodity);
     }
 
-    @DeleteMapping
-    public ResultVO delete(@RequestBody CartCommodity cartCommodity) {
+    @DeleteMapping("/{id}")
+    public ResultVO delete(@PathVariable Long id) {
         log.info("从购物车删除一个商品");
-        cartCommodityService.delete(cartCommodity);
+        cartCommodityService.delete(id);
         return ResultVOUtil.success("删除成功", null);
     }
 

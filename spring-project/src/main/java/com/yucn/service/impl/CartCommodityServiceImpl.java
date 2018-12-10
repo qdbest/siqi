@@ -34,7 +34,8 @@ public class CartCommodityServiceImpl implements CartCommodityService {
     private SaleOrderRepository saleOrderRepository;
 
     @Override
-    public CartCommodity delete(CartCommodity cartCommodity) {
+    public void delete(Long id) {
+        CartCommodity cartCommodity=cartCommodityRepository.getOne(id);
         //加库存
         StockCommodity stockCommodity = stockCommodityRepository.getOne(cartCommodity.getStockCommodity().getId());
         stockCommodity.setSurplusQuantity(stockCommodity.getSurplusQuantity() + cartCommodity.getQuantity());
@@ -45,7 +46,6 @@ public class CartCommodityServiceImpl implements CartCommodityService {
         } catch (Exception e) {
             throw new YucnException(DATABASE_ERROR);
         }
-        return cartCommodity;
     }
 
     @Transactional
