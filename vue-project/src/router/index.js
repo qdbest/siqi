@@ -4,6 +4,7 @@ import CartCommodity from '../components/page/CartCommodity'
 import Stock from '../components/page/Stock'
 import Commodity from '../components/page/Commodity'
 import PurchaseCommodity from '../components/page/PurchaseCommodity'
+import Unpack from '../components/page/Unpack'
 
 Vue.use(Router)
 
@@ -28,13 +29,18 @@ export default new Router({
       children: [
         {
           path: 'commodity',
-          name: '商品类别',
+          name: '商品',
           component: Commodity
         },
         {
           path: 'purchaseCommodity',
           name: '进货',
           component: PurchaseCommodity
+        },
+        {
+          path: 'unpack',
+          name: '拆箱',
+          component: Unpack
         }
       ]
     }

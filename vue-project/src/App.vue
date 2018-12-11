@@ -27,7 +27,7 @@
     text-decoration: none;
   }
   .income > input {
-    width: 160px;
+    width: 150px;
     color: red !important;
     font-size: 16px;
     font-weight: bold;

@@ -28,8 +28,7 @@
       <fieldset>
         <legend>商品信息</legend>
         <el-form-item label="条码" prop="commodity.code">
-          <el-input placeholder="请输入商品条码" v-model="purchaseCommodity.commodity.code" ref="input"
-                    @keypress.enter.native="search">
+          <el-input placeholder="请输入商品条码" v-model="purchaseCommodity.commodity.code" ref="input" @keypress.enter.native="search">
             <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
         </el-form-item>
@@ -52,11 +51,11 @@
         </el-form-item>
         <br>
         <el-form-item label="进价" prop="paidPrice">
-          <el-input-number :precision="2" :step="0.1" :min="0" style="width: 140px"
+          <el-input-number :step="0.1" :min="0" style="width: 140px"
                            v-model="purchaseCommodity.paidPrice"></el-input-number>
         </el-form-item>
         <el-form-item label="数量" prop="quantity">
-          <el-input-number :precision="0" :step="1" :min="1" style="width: 140px"
+          <el-input-number :precision="1" :step="0.1" :min="0.1" style="width: 140px"
                            v-model="purchaseCommodity.quantity"></el-input-number>
         </el-form-item>
         <el-form-item label="总价" prop="totalPrice">
@@ -74,28 +73,23 @@
       style="width: 100%">
       <el-table-column
         prop="commodity.id"
-        label="序号"
-        width="60">
+        label="序号">
       </el-table-column>
       <el-table-column
         prop="commodity.code"
-        label="条码"
-        width="160">
+        label="条码">
       </el-table-column>
       <el-table-column
         prop="commodity.name"
-        label="名称"
-        width="200">
+        label="名称">
       </el-table-column>
       <el-table-column
         prop="commodity.specification"
-        label="规格"
-        width="200">
+        label="规格">
       </el-table-column>
       <el-table-column
         prop="commodity.unit"
-        label="单位"
-        width="60">
+        label="单位">
       </el-table-column>
       <el-table-column
         prop="commodity.price"
@@ -260,6 +254,7 @@
           } else if (this.purchaseOrder.realPay - this.purchaseOrder.pay > 0) {
             Message.error('实付不能大于应付，请核对进货单！');
           } else {
+            console.log(this.purchaseCommodities);
             postRequest('/stock/putIn', {
               purchaseOrder: this.purchaseOrder,
               purchaseCommodities: this.purchaseCommodities

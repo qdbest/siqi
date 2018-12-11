@@ -2,13 +2,15 @@
   <div>
     <el-form :inline="true">
       <el-form-item>
-        <el-input placeholder="请输入扫描商品条形码" suffix-icon="el-icon-ali-tiaoxingma" v-model="commodityCode"
-                  @keypress.enter.native="search" ref="input"></el-input>
+        <el-input placeholder="请输入扫描商品条形码" v-model="commodityCode" @keypress.enter.native="search" ref="input">
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+        </el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-check" round @click="search">确认</el-button>
+      <el-checkbox style="margin: 6px" v-model="showPaidPrice">显示进价</el-checkbox>
+      <el-form-item label="进价" v-if="showPaidPrice">
+        <el-input class="income" v-model="totalPaidPrice" :disabled="true">
+        </el-input>
       </el-form-item>
-      <el-checkbox v-model="showPaidPrice">显示进价</el-checkbox>
       <el-form-item label="应收">
         <el-input class="income" v-model="income" :disabled="true">
         </el-input>
@@ -16,7 +18,7 @@
       <el-form-item label="实收">
         <el-input class="income" placeholder="实收" v-model="realIncome"></el-input>
       </el-form-item>
-      <el-form-item label="找零">
+      <el-form-item :label="giveChange>0?'找零':'优惠'">
         <el-input class="income" v-model="giveChange" :disabled="true">
         </el-input>
       </el-form-item>
@@ -41,21 +43,27 @@
         label="规格">
       </el-table-column>
       <el-table-column
-        prop="stockCommodity.commodity.price"
-        label="零售价">
+        label="数量">
+        <template slot-scope="scope">
+          <el-input-number v-model="scope.row.quantity" :min="0.1" :step="0.1"></el-input-number>
+        </template>
       </el-table-column>
       <el-table-column v-if="showPaidPrice"
                        prop="stockCommodity.paidPrice"
                        label="进价">
       </el-table-column>
-      <el-table-column
-        label="数量">
+      <el-table-column v-if="showPaidPrice"
+                       label="总进价">
         <template slot-scope="scope">
-          <el-input-number v-model="scope.row.quantity" :min="1" :step="1"></el-input-number>
+          {{scope.row.stockCommodity.paidPrice*scope.row.quantity}}
         </template>
       </el-table-column>
       <el-table-column
-        label="总价">
+        prop="stockCommodity.commodity.price"
+        label="售价">
+      </el-table-column>
+      <el-table-column
+        label="总售价">
         <template slot-scope="scope">
           {{scope.row.stockCommodity.commodity.price*scope.row.quantity}}
         </template>
@@ -118,6 +126,11 @@
           return prev + next.stockCommodity.commodity.price * next.quantity;
         }, 0).toFixed(2);
       },
+      totalPaidPrice() {
+        return this.cartCommodities.reduce((prev, next) => {
+          return prev + next.stockCommodity.paidPrice * next.quantity;
+        }, 0).toFixed(2);
+      },
       giveChange() {
         return (this.realIncome - this.income).toFixed(2);
       }
@@ -149,7 +162,7 @@
           });
       },
       receive() {
-        if (this.realIncome - this.income >= 0) {
+        if (this.realIncome - this.totalPaidPrice >= 0) {
           postRequest(`/cart/receive`, {
             saleOrder: {
               income: this.income,
@@ -165,7 +178,7 @@
               this.$refs['input'].focus();
             });
         } else {
-          Message.error("实收不能小于应收！请确保人工输入实收！");
+          Message.error("实收不能小于进价！请确保人工输入实收！");
         }
       }
     }
